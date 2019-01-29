@@ -1,6 +1,7 @@
-package uk.ab.baking;
+package uk.ab.baking.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import uk.ab.baking.R;
 
 import android.os.Bundle;
 
