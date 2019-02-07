@@ -23,7 +23,7 @@ public class Step {
     @ColumnInfo(name = "id")
     private Integer id;
 
-    @ColumnInfo(name = "recipe_id")
+    @ColumnInfo(name = "recipe_id", index = true)
     private Integer recipeId;
 
     @Expose

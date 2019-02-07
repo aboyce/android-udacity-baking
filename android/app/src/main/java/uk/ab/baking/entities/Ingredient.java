@@ -23,7 +23,7 @@ public class Ingredient {
     @ColumnInfo(name = "id")
     private Integer id;
 
-    @ColumnInfo(name = "recipe_id")
+    @ColumnInfo(name = "recipe_id", index = true)
     private Integer recipeId;
 
     @Expose
@@ -34,14 +34,14 @@ public class Ingredient {
     @Expose
     @SerializedName("quantity")
     @ColumnInfo(name = "quantity")
-    private Integer quantity;
+    private Float quantity;
 
     @Expose
     @SerializedName("measure")
     @ColumnInfo(name = "measure")
     private String measure;
 
-    public Ingredient(Integer id, Integer recipeId, String name, Integer quantity, String measure) {
+    public Ingredient(Integer id, Integer recipeId, String name, Float quantity, String measure) {
         this.id = id;
         this.recipeId = recipeId;
         this.name = name;
@@ -50,7 +50,7 @@ public class Ingredient {
     }
 
     @Ignore
-    public Ingredient(Integer recipeId, String name, Integer quantity, String measure) {
+    public Ingredient(Integer recipeId, String name, Float quantity, String measure) {
         this.recipeId = recipeId;
         this.name = name;
         this.quantity = quantity;
@@ -81,11 +81,11 @@ public class Ingredient {
         this.name = name;
     }
 
-    public Integer getQuantity() {
+    public Float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Float quantity) {
         this.quantity = quantity;
     }
 

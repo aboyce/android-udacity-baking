@@ -3,6 +3,8 @@ package uk.ab.baking.entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -21,7 +23,7 @@ public class Recipe {
     private Integer apiId;
 
     @Expose
-    @SerializedName("id")
+    @SerializedName("name")
     @ColumnInfo(name = "name")
     private String name;
 
@@ -35,12 +37,33 @@ public class Recipe {
     @ColumnInfo(name = "image")
     private String image;
 
+    @Expose
+    @Ignore
+    @SerializedName("ingredients")
+    private List<Ingredient> ingredients;
+
+    @Expose
+    @Ignore
+    @SerializedName("steps")
+    private List<Step> steps;
+
     public Recipe(Integer id, Integer apiId, String name, Integer servings, String image) {
         this.id = id;
         this.apiId = apiId;
         this.name = name;
         this.servings = servings;
         this.image = image;
+    }
+
+    @Ignore
+    public Recipe(Integer id, Integer apiId, String name, Integer servings, String image, List<Ingredient> ingredients, List<Step> steps) {
+        this.id = id;
+        this.apiId = apiId;
+        this.name = name;
+        this.servings = servings;
+        this.image = image;
+        this.ingredients = ingredients;
+        this.steps = steps;
     }
 
     @Ignore
@@ -73,5 +96,21 @@ public class Recipe {
 
     public String getImage() {
         return image;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
     }
 }
