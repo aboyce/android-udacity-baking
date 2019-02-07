@@ -8,9 +8,14 @@ import java.util.List;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "recipe")
+@Entity(tableName = "recipe",
+        indices = {
+            @Index(value = "id", unique = true),
+            @Index(value = "api_id", unique = true)
+        })
 public class Recipe {
 
     @PrimaryKey(autoGenerate = true)
@@ -62,8 +67,8 @@ public class Recipe {
         this.name = name;
         this.servings = servings;
         this.image = image;
-        this.ingredients = ingredients;
-        this.steps = steps;
+        setIngredients(ingredients);
+        setSteps(steps);
     }
 
     @Ignore
@@ -104,6 +109,8 @@ public class Recipe {
 
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+        // Ensure all of the ingredients are linked to this recipe.
+        this.ingredients.forEach(ingredient -> ingredient.setRecipeId(this.apiId));
     }
 
     public List<Step> getSteps() {
@@ -112,5 +119,7 @@ public class Recipe {
 
     public void setSteps(List<Step> steps) {
         this.steps = steps;
+        // Ensure all of the steps are linked to this recipe.
+        this.steps.forEach(step -> step.setRecipeId(this.apiId));
     }
 }

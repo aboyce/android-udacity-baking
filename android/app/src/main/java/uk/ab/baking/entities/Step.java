@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey;
         foreignKeys = {
             @ForeignKey(
                 entity = Recipe.class,
-                parentColumns = "id",
+                parentColumns = "api_id",
                 childColumns = "recipe_id",
                 onDelete = ForeignKey.CASCADE)
         })
@@ -28,8 +28,9 @@ public class Step {
 
     @Expose
     @SerializedName("id")
-    @ColumnInfo(name = "api_id")
-    private Integer apiId;
+    @ColumnInfo(name = "order")
+    // Use the Id as an order for sorting.
+    private Integer order;
 
     @Expose
     @SerializedName("description")
@@ -51,10 +52,10 @@ public class Step {
     @ColumnInfo(name = "url_thumbnail")
     private String thumbnailUrl;
 
-    public Step(Integer id, Integer recipeId, Integer apiId, String description, String shortDescription, String videoUrl, String thumbnailUrl) {
+    public Step(Integer id, Integer recipeId, Integer order, String description, String shortDescription, String videoUrl, String thumbnailUrl) {
         this.id = id;
         this.recipeId = recipeId;
-        this.apiId = apiId;
+        this.order = order;
         this.description = description;
         this.shortDescription = shortDescription;
         this.videoUrl = videoUrl;
@@ -62,9 +63,9 @@ public class Step {
     }
 
     @Ignore
-    public Step(Integer recipeId, Integer apiId, String description, String shortDescription, String videoUrl, String thumbnailUrl) {
+    public Step(Integer recipeId, Integer order, String description, String shortDescription, String videoUrl, String thumbnailUrl) {
         this.recipeId = recipeId;
-        this.apiId = apiId;
+        this.order = order;
         this.description = description;
         this.shortDescription = shortDescription;
         this.videoUrl = videoUrl;
@@ -87,12 +88,12 @@ public class Step {
         this.recipeId = recipeId;
     }
 
-    public Integer getApiId() {
-        return apiId;
+    public Integer getOrder() {
+        return order;
     }
 
-    public void setApiId(Integer apiId) {
-        this.apiId = apiId;
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
     public String getDescription() {

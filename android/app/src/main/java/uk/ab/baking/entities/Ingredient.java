@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey;
         foreignKeys = {
             @ForeignKey(
                 entity = Recipe.class,
-                parentColumns = "id",
+                parentColumns = "api_id",
                 childColumns = "recipe_id",
                 onDelete = ForeignKey.CASCADE)
         })

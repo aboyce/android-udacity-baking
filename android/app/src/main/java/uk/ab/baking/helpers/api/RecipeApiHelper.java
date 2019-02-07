@@ -6,15 +6,18 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
+import uk.ab.baking.database.ApplicationExecutors;
 import uk.ab.baking.entities.Recipe;
 
 public class RecipeApiHelper {
 
-    private static RecipeApiEndpoint getApiEndpoint() {
-
+    public static RecipeApiEndpoint getApiEndpoint() {
         String baseUrl = RecipeApiEndpoint.BASE_URL;
         Timber.d("Base URL: '" + baseUrl + "'.");
 
@@ -29,22 +32,5 @@ public class RecipeApiHelper {
         Timber.d("Built the Retrofit instance from the base URL using Gson Converter.");
 
         return retrofit.create(RecipeApiEndpoint.class);
-    }
-
-    public static List<Recipe> getRecipesFromApi() {
-
-        RecipeApiEndpoint endpoint = getApiEndpoint();
-
-        List<Recipe> recipes = null;
-
-        try {
-            recipes = endpoint.getRecipes().execute().body();
-            Timber.d("Received the recipes from the API.");
-        } catch (IOException error) {
-            error.printStackTrace();
-            Timber.e(error,"Error trying to get the Recipes from the API");
-        }
-
-        return recipes;
     }
 }

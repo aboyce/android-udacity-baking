@@ -6,15 +6,23 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 import uk.ab.baking.database.dao.IngredientDao;
 import uk.ab.baking.database.dao.RecipeDao;
 import uk.ab.baking.database.dao.StepDao;
 import uk.ab.baking.entities.Recipe;
+import uk.ab.baking.helpers.api.RecipeApiEndpoint;
+import uk.ab.baking.helpers.api.RecipeApiHelper;
 
 public class DataRepository {
 
     private static DataRepository sInstance;
 
+    private ApplicationExecutors executors;
+    private RecipeApiEndpoint recipeApiEndpoint;
     private RecipeDao recipeDao;
     private IngredientDao ingredientDao;
     private StepDao stepDao;
@@ -26,10 +34,47 @@ public class DataRepository {
         recipeDao = database.recipeDao();
         ingredientDao = database.ingredientDao();
         stepDao = database.stepDao();
+        recipeApiEndpoint = RecipeApiHelper.getApiEndpoint();
+        executors = ApplicationExecutors.getInstance();
+
         mAllRecipes = recipeDao.getRecipes();
+        refreshRecipes();
     }
 
     public LiveData<List<Recipe>> getAllRecipes() {
         return mAllRecipes;
+    }
+
+    private void refreshRecipes() {
+        Timber.d("Will update the recipes from the recipe API on the network executor.");
+        executors.networkIO().execute(() -> {
+
+            // TODO: Check to see if this is required.
+
+            recipeApiEndpoint.getRecipes().enqueue(new Callback<List<Recipe>>() {
+                @Override
+                public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                    Timber.i("Successful response from recipe API endpoint.");
+                    executors.diskIO().execute(() -> {
+                        List<Recipe> recipes = response.body();
+                        if (recipes == null) {
+                            Timber.e("The recipes received from the recipe API was null.");
+                            return;
+                        }
+                        recipeDao.insertAll(recipes);
+                        recipes.forEach(recipe -> {
+                            ingredientDao.insertAll(recipe.getIngredients());
+                            stepDao.insertAll(recipe.getSteps());
+                        });
+                        Timber.i("Updated recipes, ingredients, and steps into the database.");
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<List<Recipe>> call, Throwable error) {
+                    Timber.e(error, "Error trying to get recipes from recipe API endpoint.");
+                }
+            });
+        });
     }
 }
