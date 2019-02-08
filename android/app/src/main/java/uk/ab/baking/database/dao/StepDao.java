@@ -29,4 +29,7 @@ public abstract class StepDao {
 
     @Query("SELECT * FROM step WHERE recipe_id =:recipeId")
     public abstract LiveData<List<Step>> getSteps(Integer recipeId);
+
+    @Query("SELECT * FROM step WHERE recipe_id =:recipeId")
+    public abstract List<Step> getSynchronousSteps(Integer recipeId);
 }

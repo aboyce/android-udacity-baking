@@ -2,10 +2,13 @@ package uk.ab.baking.database;
 
 import android.app.Application;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
+import androidx.lifecycle.Observer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,7 +16,9 @@ import timber.log.Timber;
 import uk.ab.baking.database.dao.IngredientDao;
 import uk.ab.baking.database.dao.RecipeDao;
 import uk.ab.baking.database.dao.StepDao;
+import uk.ab.baking.entities.Ingredient;
 import uk.ab.baking.entities.Recipe;
+import uk.ab.baking.entities.Step;
 import uk.ab.baking.helpers.api.RecipeApiEndpoint;
 import uk.ab.baking.helpers.api.RecipeApiHelper;
 
@@ -38,11 +43,20 @@ public class DataRepository {
         executors = ApplicationExecutors.getInstance();
 
         mAllRecipes = recipeDao.getRecipes();
+
         refreshRecipes();
     }
 
     public LiveData<List<Recipe>> getAllRecipes() {
         return mAllRecipes;
+    }
+
+    public List<Ingredient> getIngredientsForRecipe(@NotNull Integer recipeId) {
+        return ingredientDao.getSynchronousIngredients(recipeId);
+    }
+
+    public List<Step> getStepsForRecipe(@NotNull Integer recipeId) {
+        return stepDao.getSynchronousSteps(recipeId);
     }
 
     private void refreshRecipes() {
