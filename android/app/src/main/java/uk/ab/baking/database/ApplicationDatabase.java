@@ -17,7 +17,7 @@ import uk.ab.baking.entities.Step;
         Recipe.class,
         Ingredient.class,
         Step.class
-}, version = 1)
+}, version = 1, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "baking_db";
