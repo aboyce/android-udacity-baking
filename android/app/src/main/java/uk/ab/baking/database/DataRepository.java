@@ -63,10 +63,13 @@ public class DataRepository {
                         }
                         recipeDao.insertAll(recipes);
                         recipes.forEach(recipe -> {
-                            ingredientDao.insertAll(recipe.getIngredients());
-                            stepDao.insertAll(recipe.getSteps());
+                            Timber.d("Updating ingredients and steps for recipe " + recipe.getName() + ".");
+                            ingredientDao.insertAll(recipe.getIngredients(), recipe.getApiId());
+                            stepDao.insertAll(recipe.getSteps(), recipe.getApiId());
+                            Timber.d("%s has " + recipe.getIngredients().size() + " ingredients.", recipe.getName());
+                            Timber.d("%s has " + recipe.getSteps().size() + " steps.", recipe.getName());
                         });
-                        Timber.i("Updated recipes, ingredients, and steps into the database.");
+                        Timber.i("Updated " + recipes.size() + " recipes, ingredients, and steps into the database.");
                     });
                 }
 

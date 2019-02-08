@@ -3,17 +3,9 @@ package uk.ab.baking.helpers.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
-import uk.ab.baking.database.ApplicationExecutors;
-import uk.ab.baking.entities.Recipe;
 
 public class RecipeApiHelper {
 
