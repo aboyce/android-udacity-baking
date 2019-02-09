@@ -21,12 +21,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initiate the view model.
         viewModel = ViewModelProviders.of(this).get(RecipesViewModel.class);
-        viewModel.getAllRecipes().observe(this, recipes -> {
-            Toast.makeText(getApplicationContext(), "Updates from the database.", Toast.LENGTH_LONG).show();
-            Timber.d("Count: " + recipes.size());
-        });
 
+        // Initiate the fragment, only if it is not already done.
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
