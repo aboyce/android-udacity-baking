@@ -53,7 +53,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.fragment_recipes_item_row, viewGroup, false);
-        RecipeViewHolder viewHolder =  new RecipeViewHolder(view);
+        RecipeViewHolder viewHolder = new RecipeViewHolder(view);
         view.setOnClickListener(clickedView -> {
             int recipePosition = viewHolder.getAdapterPosition();
             Timber.i("Recipe at position " + recipePosition + " was clicked on.");

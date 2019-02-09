@@ -2,8 +2,6 @@ package uk.ab.baking.viewmodels;
 
 import android.app.Application;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -13,7 +11,6 @@ import uk.ab.baking.entities.Ingredient;
 import uk.ab.baking.entities.Recipe;
 import uk.ab.baking.entities.Step;
 import uk.ab.baking.repositories.RecipeRepository;
-import uk.ab.baking.repositories.RecipesRepository;
 
 public class RecipeViewModel extends AndroidViewModel {
 
@@ -33,5 +30,13 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public LiveData<Recipe> getRecipe() {
         return recipe;
+    }
+
+    public List<Ingredient> getIngredientsForRecipeApiId(int recipeApiId) {
+        return repository.getIngredientsForRecipeApiId(recipeApiId);
+    }
+
+    public List<Step> getStepsForRecipeApiId(int recipeApiId) {
+        return repository.getStepsForRecipeApiId(recipeApiId);
     }
 }

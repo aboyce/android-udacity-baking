@@ -27,11 +27,11 @@ public class RecipesViewModel extends AndroidViewModel {
         return allRecipes;
     }
 
-    public List<Ingredient> getIngredientsForRecipe(int recipeId) {
-        return repository.getIngredientsForRecipe(recipeId);
+    public List<Ingredient> getIngredientsForRecipeApiId(int recipeApiId) {
+        return repository.getIngredientsForRecipeApiId(recipeApiId);
     }
 
-    public List<Step> getStepsForRecipe(int recipeId) {
-        return repository.getStepsForRecipe(recipeId);
+    public List<Step> getStepsForRecipeApiId(int recipeApiId) {
+        return repository.getStepsForRecipeApiId(recipeApiId);
     }
 }

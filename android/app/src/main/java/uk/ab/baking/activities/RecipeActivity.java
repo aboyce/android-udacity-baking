@@ -36,6 +36,8 @@ public class RecipeActivity extends AppCompatActivity {
         // Update the view model to have the correct recipe.
         viewModel.updateRecipe(recipeId);
 
+        setupViewModelEvents();
+
         // Initiate the fragment, only if it is not already done.
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -43,5 +45,15 @@ public class RecipeActivity extends AppCompatActivity {
                     .add(R.id.activity_recipe_fl_recipe_container, new RecipeFragment())
                     .commit();
         }
+    }
+
+    private void setupViewModelEvents() {
+        viewModel.getRecipe().observe(this, recipe -> {
+            if (recipe == null || recipe.getName() == null) {
+                setTitle(getResources().getString(R.string.app_name));
+            } else {
+                setTitle(recipe.getName());
+            }
+        });
     }
 }

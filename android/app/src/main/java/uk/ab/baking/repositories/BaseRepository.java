@@ -34,11 +34,11 @@ public abstract class BaseRepository {
         return recipeDao.getRecipeFromId(recipeId);
     }
 
-    public List<Ingredient> getIngredientsForRecipe(int recipeId) {
-        return ingredientDao.getSynchronousIngredients(recipeId);
+    public List<Ingredient> getIngredientsForRecipeApiId(int recipeApiId) {
+        return ingredientDao.getSynchronousIngredients(recipeApiId);
     }
 
-    public List<Step> getStepsForRecipe(int recipeId) {
-        return stepDao.getSynchronousSteps(recipeId);
+    public List<Step> getStepsForRecipeApiId(int recipeApiId) {
+        return stepDao.getSynchronousSteps(recipeApiId);
     }
 }

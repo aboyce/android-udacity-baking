@@ -4,4 +4,7 @@
     <!-- Recipes Fragment -->
     <integer name="fragment_recipes_number_of_columns">1</integer>
 
+    <!-- Recipe Fragment -->
+    <dimen name="fragment_recipe_ingredients_max_height">50dp</dimen>
+
 </resources>

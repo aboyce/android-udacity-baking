@@ -6,4 +6,8 @@
     <string name="fragment_recipes_tv_step_count_label">Steps:</string>
     <string name="fragment_recipes_tv_ingredients_count_label">Ingredients:</string>
 
+    <!-- Recipe Fragment -->
+    <string name="fragment_recipe_tv_ingredients_label">Ingredients</string>
+    <string name="fragment_recipe_tv_steps_label">Steps</string>
+
 </resources>
