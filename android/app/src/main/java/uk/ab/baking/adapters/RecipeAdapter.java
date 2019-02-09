@@ -24,6 +24,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         @BindView(R.id.fragment_recipes_tv_recipe_name)
         TextView recipeName;
 
+        @BindView(R.id.fragment_recipes_tv_servings)
+        TextView recipeServings;
+
         @BindView(R.id.fragment_recipes_tv_step_count)
         TextView recipeStepCount;
 
@@ -48,6 +51,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public void onBindViewHolder(@NonNull RecipeViewHolder viewHolder, int position) {
         Recipe recipe = recipes.get(position);
         viewHolder.recipeName.setText(recipe.getName());
+        viewHolder.recipeServings.setText(Integer.toString(recipe.getServings()));
         if (recipe.getSteps() != null) {
             viewHolder.recipeStepCount.setText(Integer.toString(recipe.getSteps().size()));
         } else {
