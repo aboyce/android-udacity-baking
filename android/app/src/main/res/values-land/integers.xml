@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Recipes Fragment -->
+    <integer name="fragment_recipes_number_of_columns">2</integer>
+
+</resources>

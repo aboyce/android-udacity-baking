@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
 import uk.ab.baking.R;
@@ -39,13 +39,15 @@ public class RecipesFragment extends Fragment {
         Timber.d("onCreateView has been called");
 
         View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
-
+        // Set up the recycler view to display the cards.
         RecyclerView recipesRecyclerView = rootView.findViewById(R.id.fragment_recipes_rv_root);
         // Optimisation due to the API only returning a set number at this stage.
         recipesRecyclerView.setHasFixedSize(true);
         // Set up the recycler view for the recipes.
         recipeAdapter = new RecipeAdapter();
-        recipesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        int numberOfColumns = getResources().getInteger(R.integer.fragment_recipes_number_of_columns);
+        Timber.d("The grid layout will be " + numberOfColumns + " column(s).");
+        recipesRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
         recipesRecyclerView.setAdapter(recipeAdapter);
 
         // Ensure the view model
