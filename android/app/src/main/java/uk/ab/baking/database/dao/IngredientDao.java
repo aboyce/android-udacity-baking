@@ -28,8 +28,8 @@ public abstract class IngredientDao {
     abstract void insertAll(List<Ingredient> ingredients);
 
     @Query("SELECT * FROM ingredient WHERE recipe_id =:recipeId")
-    public abstract LiveData<List<Ingredient>> getIngredients(Integer recipeId);
+    public abstract LiveData<List<Ingredient>> getIngredients(int recipeId);
 
     @Query("SELECT * FROM ingredient WHERE recipe_id =:recipeId")
-    public abstract List<Ingredient> getSynchronousIngredients(Integer recipeId);
+    public abstract List<Ingredient> getSynchronousIngredients(int recipeId);
 }

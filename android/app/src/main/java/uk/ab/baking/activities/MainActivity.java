@@ -1,16 +1,12 @@
 package uk.ab.baking.activities;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
-import timber.log.Timber;
 import uk.ab.baking.R;
 import uk.ab.baking.fragments.RecipesFragment;
 import uk.ab.baking.viewmodels.RecipesViewModel;
-
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 

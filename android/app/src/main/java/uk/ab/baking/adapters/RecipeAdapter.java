@@ -1,5 +1,7 @@
 package uk.ab.baking.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +15,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 import uk.ab.baking.R;
+import uk.ab.baking.activities.RecipeActivity;
 import uk.ab.baking.entities.Recipe;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private List<Recipe> recipes;
+
+    private Context context;
+
+    public RecipeAdapter(Context context) {
+        this.context = context;
+    }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
@@ -44,7 +53,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.fragment_recipes_item_row, viewGroup, false);
-        return new RecipeViewHolder(view);
+        RecipeViewHolder viewHolder =  new RecipeViewHolder(view);
+        view.setOnClickListener(clickedView -> {
+            int recipePosition = viewHolder.getAdapterPosition();
+            Timber.i("Recipe at position " + recipePosition + " was clicked on.");
+            handleRecipeClick(recipePosition);
+        });
+
+        return viewHolder;
     }
 
     @Override
@@ -73,5 +89,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         this.recipes = recipes;
         notifyDataSetChanged();
         Timber.d("The recipes for the recipe adapter have been updated.");
+    }
+
+    private void handleRecipeClick(int recipePosition) {
+        Recipe clickedRecipe = recipes.get(recipePosition);
+        if (clickedRecipe == null) {
+            Timber.wtf("An invalid recipe was clicked on at position " + recipePosition + ".");
+            return;
+        }
+        Timber.d("Recipe '" + clickedRecipe.getName() + "' was clicked on.");
+        Intent intent = new Intent(context, RecipeActivity.class);
+        intent.putExtra(RecipeActivity.INTENT_RECIPE_ID, clickedRecipe.getId());
+        Timber.d("Passing '" + clickedRecipe.getId() + "' through as an intent extra.");
+        context.startActivity(intent);
     }
 }

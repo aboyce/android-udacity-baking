@@ -5,4 +5,5 @@
     <string name="fragment_recipes_tv_servings_label">Servings:</string>
     <string name="fragment_recipes_tv_step_count_label">Steps:</string>
     <string name="fragment_recipes_tv_ingredients_count_label">Ingredients:</string>
+
 </resources>

@@ -1,47 +1,28 @@
-package uk.ab.baking.database;
+package uk.ab.baking.repositories;
 
 import android.app.Application;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-
-import androidx.lifecycle.Observer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
-import uk.ab.baking.database.dao.IngredientDao;
-import uk.ab.baking.database.dao.RecipeDao;
-import uk.ab.baking.database.dao.StepDao;
-import uk.ab.baking.entities.Ingredient;
+
 import uk.ab.baking.entities.Recipe;
-import uk.ab.baking.entities.Step;
 import uk.ab.baking.helpers.api.RecipeApiEndpoint;
 import uk.ab.baking.helpers.api.RecipeApiHelper;
 
-public class DataRepository {
+public class RecipesRepository extends BaseRepository {
 
-    private static DataRepository sInstance;
-
-    private ApplicationExecutors executors;
     private RecipeApiEndpoint recipeApiEndpoint;
-    private RecipeDao recipeDao;
-    private IngredientDao ingredientDao;
-    private StepDao stepDao;
 
     private LiveData<List<Recipe>> mAllRecipes;
 
-    public DataRepository(Application application) {
-        ApplicationDatabase database = ApplicationDatabase.getInstance(application);
-        recipeDao = database.recipeDao();
-        ingredientDao = database.ingredientDao();
-        stepDao = database.stepDao();
+    public RecipesRepository(Application application) {
+        super(application);
         recipeApiEndpoint = RecipeApiHelper.getApiEndpoint();
-        executors = ApplicationExecutors.getInstance();
-
         mAllRecipes = recipeDao.getRecipes();
 
         refreshRecipes();
@@ -49,14 +30,6 @@ public class DataRepository {
 
     public LiveData<List<Recipe>> getAllRecipes() {
         return mAllRecipes;
-    }
-
-    public List<Ingredient> getIngredientsForRecipe(@NotNull Integer recipeId) {
-        return ingredientDao.getSynchronousIngredients(recipeId);
-    }
-
-    public List<Step> getStepsForRecipe(@NotNull Integer recipeId) {
-        return stepDao.getSynchronousSteps(recipeId);
     }
 
     private void refreshRecipes() {

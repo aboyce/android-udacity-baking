@@ -44,13 +44,12 @@ public class RecipesFragment extends Fragment {
         // Optimisation due to the API only returning a set number at this stage.
         recipesRecyclerView.setHasFixedSize(true);
         // Set up the recycler view for the recipes.
-        recipeAdapter = new RecipeAdapter();
+        recipeAdapter = new RecipeAdapter(getContext());
         int numberOfColumns = getResources().getInteger(R.integer.fragment_recipes_number_of_columns);
         Timber.d("The grid layout will be " + numberOfColumns + " column(s).");
         recipesRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
         recipesRecyclerView.setAdapter(recipeAdapter);
 
-        // Ensure the view model
         setupViewModelEvents();
 
         return rootView;
