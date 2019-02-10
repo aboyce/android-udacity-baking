@@ -31,6 +31,8 @@ public class RecipesFragment extends Fragment {
         Timber.d("onCreate has been called");
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RecipesViewModel.class);
+        // Set up the adapter for the recipes.
+        recipeAdapter = new RecipeAdapter(getContext());
     }
 
     @Nullable
@@ -43,29 +45,27 @@ public class RecipesFragment extends Fragment {
         RecyclerView recipesRecyclerView = rootView.findViewById(R.id.fragment_recipes_rv_root);
         // Optimisation due to the API only returning a set number at this stage.
         recipesRecyclerView.setHasFixedSize(true);
-        // Set up the recycler view for the recipes.
-        recipeAdapter = new RecipeAdapter();
         int numberOfColumns = getResources().getInteger(R.integer.fragment_recipes_number_of_columns);
         Timber.d("The grid layout will be " + numberOfColumns + " column(s).");
         recipesRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
         recipesRecyclerView.setAdapter(recipeAdapter);
 
-        // Ensure the view model
         setupViewModelEvents();
 
         return rootView;
     }
 
     private void setupViewModelEvents() {
+        ApplicationExecutors executors = ApplicationExecutors.getInstance();
         viewModel.getAllRecipes().observe(this, recipes -> {
             Timber.d("ViewModel recipes has been updated.");
             if (recipeAdapter != null) {
-                ApplicationExecutors.getInstance().diskIO().execute(() -> {
+                executors.diskIO().execute(() -> {
                     recipes.forEach(recipe -> {
-                        recipe.setIngredients(viewModel.getIngredientsForRecipe(recipe.getApiId()));
-                        recipe.setSteps(viewModel.getStepsForRecipe(recipe.getApiId()));
+                        recipe.setIngredients(viewModel.getIngredientsForRecipeApiId(recipe.getApiId()));
+                        recipe.setSteps(viewModel.getStepsForRecipeApiId(recipe.getApiId()));
                     });
-                    ApplicationExecutors.getInstance().mainThread().execute(() -> {
+                    executors.mainThread().execute(() -> {
                         recipeAdapter.setRecipes(recipes);
                     });
                 });
