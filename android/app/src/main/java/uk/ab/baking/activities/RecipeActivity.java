@@ -8,9 +8,10 @@ import androidx.lifecycle.ViewModelProviders;
 import timber.log.Timber;
 import uk.ab.baking.R;
 import uk.ab.baking.fragments.RecipeFragment;
+import uk.ab.baking.fragments.StepFragment;
 import uk.ab.baking.viewmodels.RecipeViewModel;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity implements RecipeFragment.StepOnClickListener {
 
     public static final String INTENT_RECIPE_ID = "INTENT_RECIPE_ID";
 
@@ -44,6 +45,13 @@ public class RecipeActivity extends AppCompatActivity {
                     .beginTransaction()
                     .add(R.id.activity_recipe_fl_recipe_container, new RecipeFragment())
                     .commit();
+
+            if (requiresBothFragments()) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.activity_recipe_fl_step_container, new StepFragment())
+                        .commit();
+            }
         }
     }
 
@@ -55,5 +63,23 @@ public class RecipeActivity extends AppCompatActivity {
                 setTitle(recipe.getName());
             }
         });
+    }
+
+    private boolean requiresBothFragments() {
+        return findViewById(R.id.activity_recipe_fl_step_container) != null;
+    }
+
+    @Override
+    public void onStepClick(int stepId) {
+        int destinationId = R.id.activity_recipe_fl_recipe_container;
+        // If there are two fragments, we want to replace it in a different location.
+        if (requiresBothFragments()) {
+            destinationId = R.id.activity_recipe_fl_step_container;
+        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(destinationId, new StepFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }

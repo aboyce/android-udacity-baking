@@ -16,7 +16,9 @@ public class RecipeViewModel extends AndroidViewModel {
 
     private final RecipeRepository repository;
 
+    private int stepId;
     private LiveData<Recipe> recipe;
+    private LiveData<Step> clickedOnStep;
 
     public RecipeViewModel(Application application) {
         super(application);
@@ -28,8 +30,21 @@ public class RecipeViewModel extends AndroidViewModel {
         recipe = repository.getRecipe(recipeId);
     }
 
+    public void updateStep(int stepId) {
+        Timber.i("Request to update the step with id " + stepId + ".");
+        this.stepId = stepId;
+        clickedOnStep = repository.getStep(stepId);
+    }
+
     public LiveData<Recipe> getRecipe() {
         return recipe;
+    }
+
+    public LiveData<Step> getClickedOnStep() {
+        if (clickedOnStep == null) {
+            clickedOnStep = repository.getStep(stepId);
+        }
+        return clickedOnStep;
     }
 
     public List<Ingredient> getIngredientsForRecipeApiId(int recipeApiId) {

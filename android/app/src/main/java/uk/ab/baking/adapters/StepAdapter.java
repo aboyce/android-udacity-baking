@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,16 @@ import uk.ab.baking.entities.Step;
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder> {
 
     private List<Step> steps;
+
+    private OnClickListener listener;
+
+    public interface OnClickListener {
+        /**
+         * Called when a Step has been clicked from the Adapter
+         * @param stepId the Id of the Step that has been clicked on.
+         */
+        void onAdapterStepClick(int stepId);
+    }
 
     static class StepViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,20 +45,33 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
         }
     }
 
+    public StepAdapter(@NotNull StepAdapter.OnClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public StepViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.fragment_recipe_steps_item_row, viewGroup, false);
-        return new StepViewHolder(view);
+        StepViewHolder viewHolder = new StepViewHolder(view);
+        view.setOnClickListener(clickedView -> {
+            int stepPosition = viewHolder.getAdapterPosition();
+            Timber.i("Step at position " + stepPosition + " has been clicked on.");
+            listener.onAdapterStepClick(steps.get(stepPosition).getId());
+        });
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull StepViewHolder viewHolder, int position) {
         Step step = steps.get(position);
-        String stepNumber = String.format("%d.", (step.getOrder() + 1));
-        viewHolder.stepNumber.setText(stepNumber);
         viewHolder.stepShortDescription.setText(step.getShortDescription());
+        if (step.getOrder() < 1) {
+            viewHolder.stepNumber.setText("");
+        } else {
+            viewHolder.stepNumber.setText(Integer.toString(step.getOrder()) + ".");
+        }
     }
 
     @Override

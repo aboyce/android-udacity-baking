@@ -10,6 +10,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 import uk.ab.baking.entities.Recipe;
+import uk.ab.baking.entities.Step;
 import uk.ab.baking.helpers.api.RecipeApiEndpoint;
 import uk.ab.baking.helpers.api.RecipeApiHelper;
 
@@ -23,5 +24,9 @@ public class RecipeRepository extends BaseRepository {
 
     public LiveData<List<Recipe>> getAllRecipes() {
         return allRecipes;
+    }
+
+    public LiveData<Step> getStep(int stepId) {
+        return stepDao.getStep(stepId);
     }
 }
