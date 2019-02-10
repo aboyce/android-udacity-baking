@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
 import uk.ab.baking.R;
 import uk.ab.baking.adapters.IngredientAdapter;
+import uk.ab.baking.adapters.StepAdapter;
 import uk.ab.baking.database.ApplicationExecutors;
 import uk.ab.baking.entities.Ingredient;
+import uk.ab.baking.entities.Step;
 import uk.ab.baking.viewmodels.RecipeViewModel;
 
 public class RecipeFragment extends Fragment {
@@ -29,6 +31,7 @@ public class RecipeFragment extends Fragment {
     private RecipeViewModel viewModel;
 
     private IngredientAdapter ingredientAdapter;
+    private StepAdapter stepAdapter;
 
     public RecipeFragment() { }
 
@@ -37,25 +40,35 @@ public class RecipeFragment extends Fragment {
         Timber.d("onCreate has been called");
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RecipeViewModel.class);
-        // Set up the adapter for the ingredients.
+        // Set up the adapter for the ingredients and steps.
         ingredientAdapter = new IngredientAdapter();
+        stepAdapter = new StepAdapter();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Timber.d("onCreateView has been called");
-
         View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
+        setupRecyclerViews(rootView);
+        setupViewModelEvents();
+        return rootView;
+    }
+
+    private void setupRecyclerViews(View rootView) {
         // Set up the recycler view to display the ingredients.
         RecyclerView ingredientsRecyclerView = rootView.findViewById(R.id.fragment_recipe_rv_ingredients);
         // Optimisation due to the API only returning a set number at this stage.
         ingredientsRecyclerView.setHasFixedSize(true);
         ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ingredientsRecyclerView.setAdapter(ingredientAdapter);
+        ingredientsRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-        setupViewModelEvents();
-
-        return rootView;
+        // Set up the recycler view to display the steps.
+        RecyclerView stepsRecyclerView = rootView.findViewById(R.id.fragment_recipe_rv_steps);
+        // Optimisation due to the API only returning a set number at this stage.
+        stepsRecyclerView.setHasFixedSize(true);
+        stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        stepsRecyclerView.setAdapter(stepAdapter);
     }
 
     private void setupViewModelEvents() {
@@ -67,9 +80,17 @@ public class RecipeFragment extends Fragment {
                 Timber.d("Will load the ingredients for '" + recipe.getName() + "'.");
                 List<Ingredient> ingredients = viewModel.getIngredientsForRecipeApiId(recipe.getApiId());
                 if (ingredientAdapter != null) {
-                    Timber.d("Will update the adapter with " + ingredients.size() + " ingredients for '" + recipe.getName() + "'.");
+                    Timber.d("Will update the ingredients adapter with " + ingredients.size() + " ingredients for '" + recipe.getName() + "'.");
                     executors.mainThread().execute(() -> {
                         ingredientAdapter.setIngredients(ingredients);
+                    });
+                }
+                Timber.d("Will load the steps for '" + recipe.getName() + "'.");
+                List<Step> steps = viewModel.getStepsForRecipeApiId(recipe.getApiId());
+                if (stepAdapter != null) {
+                    Timber.d("Will update the steps adapter with " + steps.size() + " steps for '" + recipe.getName() + "'.");
+                    executors.mainThread().execute(() -> {
+                        stepAdapter.setSteps(steps);
                     });
                 }
             });

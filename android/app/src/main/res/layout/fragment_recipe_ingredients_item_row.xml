@@ -6,8 +6,7 @@
     android:id="@+id/fragment_recipe_ingredients_item_row_cv_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    android:background="@drawable/fragment_recipe_ingredients_item_row_border">
+    android:layout_margin="2dp">
 
     <TextView
         android:id="@+id/fragment_recipe_ingredients_tv_ingredient_name"
@@ -57,7 +56,5 @@
             tools:text="CUP" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
