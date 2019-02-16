@@ -7,4 +7,7 @@
     <!-- Recipe Fragment -->
     <dimen name="fragment_recipe_ingredients_height">100dp</dimen>
 
+    <!-- Step Fragment -->
+    <dimen name="fragment_step_video_height">200dp</dimen>
+
 </resources>

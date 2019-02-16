@@ -7,8 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".fragments.StepFragment">
 
-    <include layout="@layout/fragment_step_video"/>
-
-    <include layout="@layout/fragment_step_instructions"/>
+    <include
+        layout="@layout/fragment_step_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
