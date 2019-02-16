@@ -9,8 +9,9 @@
     <!-- Recipe Fragment -->
     <string name="fragment_recipe_tv_ingredients_label">Ingredients</string>
     <string name="fragment_recipe_tv_steps_label">Steps</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <!-- Recipe Widget -->
+    <string name="recipe_widget_list_view_title">Ingredients</string>
+    <string name="recipe_widget_list_view_empty">You need to select a Recipe</string>
 
 </resources>
