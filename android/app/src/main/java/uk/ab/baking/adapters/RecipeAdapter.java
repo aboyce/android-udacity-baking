@@ -1,5 +1,6 @@
 package uk.ab.baking.adapters;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -17,6 +18,9 @@ import timber.log.Timber;
 import uk.ab.baking.R;
 import uk.ab.baking.activities.RecipeActivity;
 import uk.ab.baking.entities.Recipe;
+import uk.ab.baking.providers.RecipeWidgetProvider;
+
+import static uk.ab.baking.providers.RecipeWidgetProvider.INTENT_EXTRA_RECIPE_API_ID;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -98,6 +102,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             return;
         }
         Timber.d("Recipe '" + clickedRecipe.getName() + "' was clicked on.");
+
+        // Update the widget if required.
+        Intent updateWidgetIntent = new Intent(context, RecipeWidgetProvider.class);
+        updateWidgetIntent.putExtra(INTENT_EXTRA_RECIPE_API_ID, clickedRecipe.getApiId());
+        updateWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        context.sendBroadcast(updateWidgetIntent);
+        Timber.d("Started action to update the recipe widget for '" + clickedRecipe.getName() + "'.");
+
+        // Load the next activity with the selected recipe.
         Intent intent = new Intent(context, RecipeActivity.class);
         intent.putExtra(RecipeActivity.INTENT_RECIPE_ID, clickedRecipe.getId());
         Timber.d("Passing '" + clickedRecipe.getId() + "' through as an intent extra.");
