@@ -11,6 +11,7 @@
     <string name="fragment_recipe_tv_steps_label">Steps</string>
     
     <!-- Recipe Widget -->
+    <string name="recipe_widget_list_view_title">Ingredients</string>
     <string name="recipe_widget_list_view_empty">You need to select a Recipe</string>
 
 </resources>

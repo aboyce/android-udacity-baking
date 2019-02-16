@@ -13,15 +13,9 @@ import uk.ab.baking.services.RecipeWidgetListViewService;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    private int recipeApiId;
-
-    public static final String INTENT_EXTRA_RECIPE_API_ID = "INTENT_EXTRA_RECIPE_API_ID";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         Timber.d("onReceive()");
-        recipeApiId = intent.getIntExtra(INTENT_EXTRA_RECIPE_API_ID, -1);
-        Timber.d("Recipe api id " + recipeApiId + " has been provided via the intent.");
         String action = intent.getAction();
         if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
             Timber.d("An app widget update as been requested.");
@@ -30,7 +24,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             int[] widgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(componentName);
             widgetManager.notifyAppWidgetViewDataChanged(widgetIds, R.id.recipe_widget_list_view_lv_ingredients);
         }
-
         super.onReceive(context, intent);
     }
 
@@ -42,7 +35,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_list_view);
             // Set the RecipeWidgetListViewService to act as the adapter for the ListView.
             Intent intent = new Intent(context, RecipeWidgetListViewService.class);
-            intent.putExtra(RecipeWidgetListViewService.RECIPE_WIDGET_INTENT_RECIPE_ID, recipeApiId);
             views.setRemoteAdapter(R.id.recipe_widget_list_view_lv_ingredients, intent);
             views.setEmptyView(R.id.recipe_widget_list_view_lv_ingredients, R.id.recipe_widget_list_view_tv_empty);
             // Instruct the widget manager to update the widget

@@ -18,9 +18,8 @@ import timber.log.Timber;
 import uk.ab.baking.R;
 import uk.ab.baking.activities.RecipeActivity;
 import uk.ab.baking.entities.Recipe;
+import uk.ab.baking.helpers.SharedPreferencesHelper;
 import uk.ab.baking.providers.RecipeWidgetProvider;
-
-import static uk.ab.baking.providers.RecipeWidgetProvider.INTENT_EXTRA_RECIPE_API_ID;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -63,7 +62,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             Timber.i("Recipe at position " + recipePosition + " was clicked on.");
             handleRecipeClick(recipePosition);
         });
-
         return viewHolder;
     }
 
@@ -101,11 +99,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             Timber.wtf("An invalid recipe was clicked on at position " + recipePosition + ".");
             return;
         }
+        SharedPreferencesHelper.setLastRecipeApiId(context, clickedRecipe.getApiId());
         Timber.d("Recipe '" + clickedRecipe.getName() + "' was clicked on.");
-
         // Update the widget if required.
         Intent updateWidgetIntent = new Intent(context, RecipeWidgetProvider.class);
-        updateWidgetIntent.putExtra(INTENT_EXTRA_RECIPE_API_ID, clickedRecipe.getApiId());
         updateWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         context.sendBroadcast(updateWidgetIntent);
         Timber.d("Started action to update the recipe widget for '" + clickedRecipe.getName() + "'.");

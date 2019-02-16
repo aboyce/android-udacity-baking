@@ -13,17 +13,14 @@ import uk.ab.baking.R;
 import uk.ab.baking.database.ApplicationDatabase;
 import uk.ab.baking.database.ApplicationExecutors;
 import uk.ab.baking.entities.Ingredient;
+import uk.ab.baking.helpers.SharedPreferencesHelper;
 
 public class RecipeWidgetListViewService extends RemoteViewsService {
 
-    public static final String RECIPE_WIDGET_INTENT_RECIPE_ID = "RECIPE_WIDGET_INTENT_RECIPE_ID";
-
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Timber.d("updateAppWidget()");
-        int recipeApiId = intent.getIntExtra(RECIPE_WIDGET_INTENT_RECIPE_ID, -1);
-        Timber.d("Will create list view with recipe api id " + recipeApiId + ".");
-        return new ListRemoteViewsFactory(this.getApplicationContext(), recipeApiId);
+        Timber.d("updateAppWidget() will create list view to display ingredients.");
+        return new ListRemoteViewsFactory(this.getApplicationContext());
     }
 }
 
@@ -31,14 +28,12 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context;
     private ApplicationDatabase database;
-    private int recipeApiId;
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    public ListRemoteViewsFactory(Context context, int recipeApiId) {
-        Timber.d("ListRemoteViewsFactory constructor, recipe api id " + recipeApiId + ".");
+    public ListRemoteViewsFactory(Context context) {
+        Timber.d("ListRemoteViewsFactory constructor");
         this.context = context;
         this.database = ApplicationDatabase.getInstance(context);
-        this.recipeApiId = recipeApiId;
     }
 
     @Override
@@ -49,15 +44,15 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         Timber.d("onDataSetChanged()");
-        if (recipeApiId == -1) {
-            Timber.w("The recipe api id has not been updated");
-        } else {
-            ApplicationExecutors.getInstance().diskIO().execute(() -> {
+        ApplicationExecutors.getInstance().diskIO().execute(() -> {
+            int recipeApiId = SharedPreferencesHelper.getLastRecipeApiId(context);
+            if (recipeApiId != -1) {
                 ingredients = database.ingredientDao().getSynchronousIngredients(recipeApiId);
                 Timber.d("onDataSetChanged() the ingredients have been updated.");
-                Timber.wtf("THERE ARE " + ingredients.size() + " INGREDIENTS NOW!");
-            });
-        }
+            } else {
+                Timber.w("onDataSetChanged() the recipe api id has not yet been set.");
+            }
+        });
     }
 
     @Override
